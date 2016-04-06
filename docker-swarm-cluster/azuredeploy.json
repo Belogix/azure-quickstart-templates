@@ -168,6 +168,20 @@
               "priority": 1000,
               "direction": "Inbound"
             }
+          },
+          {
+            "name": "http-plain",
+            "properties": {
+              "description": "",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 1000,
+              "direction": "Inbound"
+            }
           }
         ]
       }
@@ -278,8 +292,30 @@
           "id": "[variables('mastersLbIPConfigID')]"
         },
         "protocol": "tcp",
-        "frontendPort": "[copyIndex(2200)]",
+        "frontendPort": "[copyIndex(443)]",
         "backendPort": 22,
+        "enableFloatingIP": false
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/loadBalancers/inboundNatRules",
+      "name": "[concat(variables('mastersLbName'), '/', 'HTTP-ToDocker-', variables('vmNameMaster'), copyIndex())]",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "lbNatLoopMaster",
+        "count": "[variables('masterCount')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/loadBalancers/', variables('mastersLbName'))]"
+      ],
+      "properties": {
+        "frontendIPConfiguration": {
+          "id": "[variables('mastersLbIPConfigID')]"
+        },
+        "protocol": "tcp",
+        "frontendPort": "[copyIndex(8080)]",
+        "backendPort": 80,
         "enableFloatingIP": false
       }
     },
@@ -548,7 +584,7 @@
   "outputs": {
     "sshTunnelCmd": {
       "type": "string",
-      "value": "[concat('ssh -L 2375:swarm-master-0:2375 -N ', variables('adminUsername'), '@', reference(variables('managementPublicIPAddrName')).dnsSettings.fqdn, ' -p 2200')]"
+      "value": "[concat('ssh -L 2375:swarm-master-0:2375 -N ', variables('adminUsername'), '@', reference(variables('managementPublicIPAddrName')).dnsSettings.fqdn, ' -p 443')]"
     },
     "dockerCmd": {
       "type": "string",
@@ -560,15 +596,15 @@
     },
     "sshMaster0": {
       "type": "string",
-      "value": "[concat('ssh ', variables('adminUsername'), '@', reference(variables('managementPublicIPAddrName')).dnsSettings.fqdn, ' -A -p 2200')]"
+      "value": "[concat('ssh ', variables('adminUsername'), '@', reference(variables('managementPublicIPAddrName')).dnsSettings.fqdn, ' -A -p 443')]"
     },
     "sshMaster1": {
       "type": "string",
-      "value": "[concat('ssh ', variables('adminUsername'), '@', reference(variables('managementPublicIPAddrName')).dnsSettings.fqdn, ' -A -p 2201')]"
+      "value": "[concat('ssh ', variables('adminUsername'), '@', reference(variables('managementPublicIPAddrName')).dnsSettings.fqdn, ' -A -p 444')]"
     },
     "sshMaster2": {
       "type": "string",
-      "value": "[concat('ssh ', variables('adminUsername'), '@', reference(variables('managementPublicIPAddrName')).dnsSettings.fqdn, ' -A -p 2202')]"
+      "value": "[concat('ssh ', variables('adminUsername'), '@', reference(variables('managementPublicIPAddrName')).dnsSettings.fqdn, ' -A -p 445')]"
     }
   }
 }
