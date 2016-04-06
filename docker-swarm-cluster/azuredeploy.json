@@ -170,7 +170,7 @@
             }
           },
           {
-            "name": "http-plain",
+            "name": "http",
             "properties": {
               "description": "",
               "protocol": "Tcp",
