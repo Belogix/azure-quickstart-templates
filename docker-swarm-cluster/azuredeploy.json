@@ -299,28 +299,6 @@
     },
     {
       "apiVersion": "2015-06-15",
-      "type": "Microsoft.Network/loadBalancers/inboundNatRules",
-      "name": "[concat(variables('mastersLbName'), '/', 'HTTP-ToDocker-', variables('vmNameMaster'), copyIndex())]",
-      "location": "[resourceGroup().location]",
-      "copy": {
-        "name": "lbNatLoopMaster",
-        "count": "[variables('masterCount')]"
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Network/loadBalancers/', variables('mastersLbName'))]"
-      ],
-      "properties": {
-        "frontendIPConfiguration": {
-          "id": "[variables('mastersLbIPConfigID')]"
-        },
-        "protocol": "tcp",
-        "frontendPort": "[copyIndex(8080)]",
-        "backendPort": 80,
-        "enableFloatingIP": false
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
       "name": "[variables('nodesLbName')]",
       "type": "Microsoft.Network/loadBalancers",
       "location": "[resourceGroup().location]",
