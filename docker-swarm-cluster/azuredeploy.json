@@ -222,7 +222,8 @@
       "dependsOn": [
         "[concat('Microsoft.Network/loadBalancers/', variables('mastersLbName'))]",
         "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
-        "[concat('Microsoft.Network/loadBalancers/', variables('mastersLbName'), '/inboundNatRules/',  'SSH-', variables('vmNameMaster'), copyIndex())]"
+        "[concat('Microsoft.Network/loadBalancers/', variables('mastersLbName'), '/inboundNatRules/',  'SSH-', variables('vmNameMaster'), copyIndex())]",
+        "[concat('Microsoft.Network/loadBalancers/', variables('mastersLbName'), '/inboundNatRules/',  'HTTP-', variables('vmNameMaster'), copyIndex())]"
       ],
       "properties": {
         "ipConfigurations": [
@@ -242,6 +243,9 @@
               "loadBalancerInboundNatRules": [
                 {
                   "id": "[concat(variables('mastersLbID'),'/inboundNatRules/SSH-',variables('vmNameMaster'),copyindex())]"
+                },
+                {
+                  "id": "[concat(variables('mastersLbID'),'/inboundNatRules/HTTP-',variables('vmNameMaster'),copyindex())]"
                 }
               ]
             }
