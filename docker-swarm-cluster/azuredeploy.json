@@ -44,7 +44,7 @@
     "mastersNsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('mastersNsgName'))]",
     "nodesNsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nodesNsgName'))]",
     "newStorageAccountName": "[uniqueString(resourceGroup().id, deployment().name)]",
-    "clusterFqdn": "[concat('swarm-',uniqueString(resourceGroup().id, deployment().name))]",
+    "clusterFqdn": "beazley-swarm",
     "storageAccountType": "Standard_LRS",
     "vhdBlobContainer": "vhds",
     "mastersLbName": "swarm-lb-masters",
