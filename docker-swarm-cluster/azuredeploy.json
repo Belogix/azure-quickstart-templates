@@ -318,7 +318,7 @@
           "id": "[variables('mastersLbIPConfigID')]"
         },
         "protocol": "tcp",
-        "frontendPort": "[copyIndex(8080)]",
+        "frontendPort": "[copyIndex(80)]",
         "backendPort": 80,
         "enableFloatingIP": false
       }
