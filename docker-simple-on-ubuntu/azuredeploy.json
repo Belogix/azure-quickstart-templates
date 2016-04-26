@@ -37,10 +37,10 @@
         "description": "Username for the Virtual Machine."
       }
     },
-    "adminPassword": {
+    "sshPublicKey": {
       "type": "securestring",
       "metadata": {
-        "description": "Password for the Virtual Machine."
+        "description": "SSH public key for the Virtual Machines."
       }
     },
     "dnsNameForPublicIP": {
@@ -66,20 +66,22 @@
     "imagePublisher": "Canonical",
     "imageOffer": "UbuntuServer",
     "OSDiskName": "osdiskfordockersimple",
-    "nicName": "myVMNic",
+    "nicName": "beazleyVMNic",
     "extensionName": "DockerExtension",
     "addressPrefix": "10.0.0.0/16",
     "subnetName": "Subnet",
     "subnetPrefix": "10.0.0.0/24",
     "storageAccountType": "Standard_LRS",
-    "publicIPAddressName": "myPublicIP",
+    "publicIPAddressName": "beazleyPublicIP",
     "publicIPAddressType": "Dynamic",
     "vmStorageAccountContainerName": "vhds",
-    "vmName": "MyDockerVM",
+    "vmName": "BealzeyDocker",
     "vmSize": "Standard_D1",
-    "virtualNetworkName": "MyVNET",
+    "virtualNetworkName": "bHive-vnet",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-    "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]"
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
+    "adminUsername":"[parameters('adminUsername')]"
+    "sshKeyPath": "[concat('/home/', variables('adminUsername'), '/.ssh/authorized_keys')]",
   },
   "resources": [
     {
@@ -166,7 +168,17 @@
         "osProfile": {
           "computerName": "[variables('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": "true",
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "[variables('sshKeyPath')]",
+                  "keyData": "[parameters('sshPublicKey')]"
+                }
+              ]
+            }
+        }
         },
         "storageProfile": {
           "imageReference": {
