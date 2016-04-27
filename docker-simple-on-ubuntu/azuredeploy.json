@@ -80,7 +80,7 @@
     "virtualNetworkName": "bHive-vnet",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
-    "adminUsername":"[parameters('adminUsername')]",
+    "adminUsername": "[parameters('adminUsername')]",
     "sshKeyPath": "[concat('/home/', variables('adminUsername'), '/.ssh/authorized_keys')]"
   },
   "resources": [
